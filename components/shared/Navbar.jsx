@@ -221,7 +221,7 @@ export default function Navbar() {
       >
         <nav
           className="nav-bar pointer-events-auto flex items-center
-                     w-full max-w-[380px] p-2 gap-1"
+                     w-full max-w-95 p-2 gap-1"
           style={{
             background: "rgba(255,255,255,0.90)",
             backdropFilter: "blur(24px) saturate(200%)",
