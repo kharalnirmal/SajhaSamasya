@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Home, PlusCircle, User } from "lucide-react";
 import { useUser } from "@clerk/nextjs";
+import Image from "next/image";
 
 export default function Navbar() {
   const [lang, setLang] = useState("en"); // "en" or "ne"
@@ -16,8 +17,14 @@ export default function Navbar() {
       {/* ── Top Navbar ── */}
       <header className="top-0 z-50 sticky flex justify-between items-center bg-white shadow-sm px-4 py-3 border-b">
         <Link href="/" className="flex items-center gap-2">
-          <span className="text-xl">🏔️</span>
-          <h1 className="font-bold text-green-700 text-lg leading-tight">
+          <Image
+            src="/logo.png"
+            alt="SajhaSamasya Logo"
+            width={32}
+            height={32}
+            className="rounded-full"
+          />
+          <h1 className="font-bold text-primary text-lg leading-tight">
             {lang === "en" ? "SajhaSamasya" : "साझा समस्या"}
           </h1>
         </Link>

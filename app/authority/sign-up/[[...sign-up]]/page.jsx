@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function AuthoritySignUpPage() {
   const { isLoaded, signUp, setActive } = useSignUp();
@@ -89,7 +90,7 @@ export default function AuthoritySignUpPage() {
         router.push("/authority/dashboard");
       }
     } catch (err) {
-      setError(err.errors?.[0]?.message || "Invalid OTP");
+      setError(err.errors?.[0]?.message || err.message || "Invalid OTP");
     } finally {
       setLoading(false);
     }
@@ -98,11 +99,17 @@ export default function AuthoritySignUpPage() {
   return (
     <div className="flex justify-center items-center bg-blue-50 min-h-screen">
       <div className="bg-white shadow-lg p-8 rounded-2xl w-full max-w-md">
+        <Link
+          href="/sign-in"
+          className="inline-block mb-4 text-gray-500 text-sm hover:underline"
+        >
+          ← Back
+        </Link>
         <h1 className="mb-2 font-bold text-blue-700 text-2xl text-center">
           🏛️ Authority Sign Up
         </h1>
         <p className="mb-6 text-gray-500 text-sm text-center">
-          SajhaSamasaya — Authority Access
+          SajhaSamasya — Authority Access
         </p>
 
         {/* Step 1: Secret Code */}
@@ -125,7 +132,7 @@ export default function AuthoritySignUpPage() {
             <button
               type="submit"
               disabled={loading}
-              className="bg-blue-600 hover:bg-blue-700 py-2 rounded-lg w-full text-white transition"
+              className="bg-blue-600 hover:bg-blue-700 disabled:opacity-50 py-2 rounded-lg w-full text-white transition"
             >
               {loading ? "Verifying..." : "Verify Code"}
             </button>
@@ -200,12 +207,12 @@ export default function AuthoritySignUpPage() {
 
         <p className="mt-4 text-gray-500 text-sm text-center">
           Already have an account?{" "}
-          <a
+          <Link
             href="/authority/sign-in"
             className="text-blue-600 hover:underline"
           >
             Sign In
-          </a>
+          </Link>
         </p>
       </div>
     </div>
