@@ -2,6 +2,7 @@ import { auth, clerkClient } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 export async function POST() {
+  //post request to set citizen role for the user
   try {
     const { userId } = await auth();
     if (!userId) {
