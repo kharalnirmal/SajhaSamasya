@@ -288,84 +288,81 @@ export default function AuthorityDashboard() {
   const hasTrendData = trendData.some((d) => d.Reported > 0 || d.Resolved > 0);
 
   return (
-    <div className="bg-gray-50 pb-28 min-h-screen">
+    <div className="bg-slate-50 pb-28 min-h-screen">
       {/* ── Authority header ── */}
-      <div className="bg-blue-700 px-4 pt-5 pb-6 text-white">
-        <div className="flex justify-between items-start mx-auto max-w-2xl">
+      <div className="bg-white border-b border-slate-100 px-4 pt-5 pb-5">
+        <div className="flex justify-between items-center mx-auto max-w-2xl">
           <div className="flex items-center gap-3">
             {authority?.avatar ? (
               <Image
                 src={authority.avatar}
                 alt={authority.name}
-                width={48}
-                height={48}
-                className="border-2 border-white/40 rounded-full object-cover"
+                width={40}
+                height={40}
+                className="border border-slate-200 rounded-full object-cover"
               />
             ) : (
-              <div className="flex justify-center items-center bg-white/20 rounded-full w-12 h-12 font-bold text-white text-xl">
+              <div className="flex justify-center items-center bg-indigo-100 rounded-full w-10 h-10 font-bold text-indigo-600 text-sm">
                 {authority?.name?.[0]?.toUpperCase()}
               </div>
             )}
             <div>
-              <p className="font-bold text-base leading-tight">
+              <p className="font-semibold text-slate-800 text-sm leading-tight">
                 {authority?.name}
               </p>
               {authority?.department && (
-                <p className="text-blue-200 text-xs">{authority.department}</p>
+                <p className="text-slate-400 text-xs">{authority.department}</p>
               )}
-              <div className="mt-1">
+              <div className="flex items-center gap-3 mt-0.5">
                 <RatingStars rating={authority?.rating ?? 5} />
+                <span className="text-slate-400 text-[10px]">
+                  {authority?.totalResolved ?? 0} {t("auth.resolved")} ·{" "}
+                  {authority?.totalIgnored ?? 0} {t("auth.ignored")}
+                </span>
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-1.5">
             <button
               onClick={() => setAreaOpen((o) => !o)}
-              className="flex items-center gap-1 bg-white/20 hover:bg-white/30 px-2 py-1.5 rounded-lg text-white text-xs transition"
+              className="flex items-center gap-1 bg-slate-100 hover:bg-slate-200 px-2.5 py-1.5 rounded-lg text-slate-600 text-xs transition"
             >
               <Settings className="w-3.5 h-3.5" />
               {t("auth.area")}
             </button>
             <button
               onClick={handleSignOut}
-              className="flex items-center gap-1 bg-white/20 hover:bg-red-500 px-2 py-1.5 rounded-lg text-white text-xs transition"
+              className="flex items-center gap-1 bg-slate-100 hover:bg-red-50 hover:text-red-600 px-2 py-1.5 rounded-lg text-slate-500 text-xs transition"
             >
               <LogOut className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>
-
-        {/* Rating info */}
-        <div className="mx-auto mt-2 max-w-2xl">
-          <p className="text-blue-200 text-xs">
-            {authority?.totalResolved ?? 0} {t("auth.resolved")} ·{" "}
-            {authority?.totalIgnored ?? 0} {t("auth.ignored")}
-            {(authority?.rating ?? 5) < 3.5 && (
-              <span className="ml-2 text-yellow-300">
-                ⚠ {t("auth.lowRating")}
-              </span>
-            )}
-          </p>
-        </div>
+        {(authority?.rating ?? 5) < 3.5 && (
+          <div className="mx-auto mt-2 max-w-2xl">
+            <p className="text-yellow-600 text-xs">⚠ {t("auth.lowRating")}</p>
+          </div>
+        )}
       </div>
 
       {/* ── Area settings panel ── */}
       {areaOpen && (
-        <div className="bg-white shadow-md mx-auto px-4 py-4 border-b max-w-2xl">
+        <div className="bg-white mx-auto px-4 py-4 border-b border-slate-100 max-w-2xl">
           <div className="flex justify-between items-center mb-3">
-            <h3 className="font-semibold text-gray-800 text-sm">
+            <h3 className="font-semibold text-slate-700 text-sm">
               {t("auth.areaSettings")}
             </h3>
-            <button onClick={() => setAreaOpen(false)}>
-              <X className="w-4 h-4 text-gray-400" />
+            <button
+              onClick={() => setAreaOpen(false)}
+              className="p-1 rounded-md hover:bg-slate-100 transition"
+            >
+              <X className="w-4 h-4 text-slate-400" />
             </button>
           </div>
-          <p className="mb-3 text-gray-500 text-xs">
-            {t("auth.areaHint")}
-          </p>
+          <p className="mb-3 text-slate-400 text-xs">{t("auth.areaHint")}</p>
 
           <div className="mb-3">
-            <p className="mb-1.5 font-medium text-gray-700 text-xs">
+            <p className="mb-1.5 font-medium text-slate-600 text-xs">
               {t("auth.categories")}
             </p>
             <div className="flex flex-wrap gap-1.5">
@@ -375,8 +372,8 @@ export default function AuthorityDashboard() {
                   onClick={() => toggleCategory(c)}
                   className={`px-3 py-1 rounded-full text-xs capitalize border transition ${
                     selectedCategories.includes(c)
-                      ? "bg-blue-600 border-blue-600 text-white"
-                      : "bg-gray-50 border-gray-300 text-gray-600"
+                      ? "bg-indigo-600 border-indigo-600 text-white"
+                      : "bg-slate-50 border-slate-200 text-slate-500 hover:border-slate-300"
                   }`}
                 >
                   {c}
@@ -386,11 +383,13 @@ export default function AuthorityDashboard() {
           </div>
 
           <div className="mb-4">
-            <p className="mb-1.5 font-medium text-gray-700 text-xs">{t("auth.district")}</p>
+            <p className="mb-1.5 font-medium text-slate-600 text-xs">
+              {t("auth.district")}
+            </p>
             <select
               value={selectedDistrict}
               onChange={(e) => setSelectedDistrict(e.target.value)}
-              className="bg-white px-3 py-2 border border-gray-300 focus:border-blue-500 rounded-xl focus:outline-none w-full text-sm"
+              className="bg-white px-3 py-2 border border-slate-200 focus:border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-100 w-full text-sm transition"
             >
               <option value="">{t("auth.selectDistrict")}</option>
               {DISTRICTS.map((d) => (
@@ -404,7 +403,7 @@ export default function AuthorityDashboard() {
           <button
             onClick={handleSaveArea}
             disabled={savingArea}
-            className="bg-blue-600 hover:bg-blue-700 disabled:opacity-60 px-4 py-2 rounded-xl w-full font-medium text-white text-sm transition"
+            className="bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 px-4 py-2 rounded-lg w-full font-medium text-white text-sm transition"
           >
             {savingArea ? t("auth.saving") : t("auth.saveArea")}
           </button>
@@ -413,35 +412,35 @@ export default function AuthorityDashboard() {
 
       <div className="space-y-4 mx-auto px-4 pt-4 max-w-2xl">
         {/* ── Stats grid ── */}
-        <div className="gap-2 grid grid-cols-5">
+        <div className="gap-3 grid grid-cols-5">
           {[
             {
               label: t("auth.total"),
               value: stats.total ?? 0,
               icon: ClipboardList,
-              color: "text-blue-500",
-              bg: "bg-blue-50",
+              color: "text-indigo-500",
+              bg: "bg-indigo-50",
             },
             {
               label: t("auth.pending"),
               value: stats.pending ?? 0,
               icon: Clock,
-              color: "text-yellow-500",
-              bg: "bg-yellow-50",
+              color: "text-amber-500",
+              bg: "bg-amber-50",
             },
             {
               label: t("auth.active"),
               value: stats.inProgress ?? 0,
               icon: TrendingUp,
-              color: "text-blue-400",
+              color: "text-blue-500",
               bg: "bg-blue-50",
             },
             {
               label: t("auth.done"),
               value: stats.completed ?? 0,
               icon: CheckCircle,
-              color: "text-green-500",
-              bg: "bg-green-50",
+              color: "text-emerald-500",
+              bg: "bg-emerald-50",
             },
             {
               label: t("auth.overdue"),
@@ -453,15 +452,17 @@ export default function AuthorityDashboard() {
           ].map((s) => (
             <div
               key={s.label}
-              className="bg-white shadow-sm p-2 border rounded-xl text-center"
+              className="bg-white p-2.5 border border-slate-100 rounded-xl text-center"
             >
               <div
-                className={`flex justify-center items-center rounded-full w-7 h-7 mx-auto mb-1 ${s.bg}`}
+                className={`flex justify-center items-center rounded-lg w-7 h-7 mx-auto mb-1.5 ${s.bg}`}
               >
                 <s.icon className={`w-3.5 h-3.5 ${s.color}`} />
               </div>
-              <p className="font-bold text-gray-900 text-lg">{s.value}</p>
-              <p className="text-[10px] text-gray-400">{s.label}</p>
+              <p className="font-bold text-slate-800 text-lg leading-none">
+                {s.value}
+              </p>
+              <p className="text-[10px] text-slate-400 mt-0.5">{s.label}</p>
             </div>
           ))}
         </div>
@@ -471,8 +472,8 @@ export default function AuthorityDashboard() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {/* Status Distribution — Donut */}
             {statusChartData.length > 0 && (
-              <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4">
-                <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">
+              <div className="bg-white border border-slate-100 rounded-xl p-4">
+                <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
                   {t("auth.statusDist")}
                 </h4>
                 <div className="relative" style={{ height: 180 }}>
@@ -515,10 +516,10 @@ export default function AuthorityDashboard() {
                   </ResponsiveContainer>
                   {/* Center label */}
                   <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className="text-2xl font-extrabold text-gray-900 leading-none">
+                    <span className="text-2xl font-bold text-slate-800 leading-none">
                       {stats.total ?? 0}
                     </span>
-                    <span className="text-[10px] font-semibold text-gray-400 uppercase tracking-wider mt-0.5">
+                    <span className="text-[10px] font-medium text-slate-400 uppercase tracking-wider mt-0.5">
                       {t("auth.total")}
                     </span>
                   </div>
@@ -528,12 +529,12 @@ export default function AuthorityDashboard() {
                   {statusChartData.map((entry) => (
                     <div key={entry.name} className="flex items-center gap-1.5">
                       <span
-                        className="w-2.5 h-2.5 rounded-full shrink-0"
+                        className="w-2 h-2 rounded-full shrink-0"
                         style={{ background: STATUS_PIE_COLORS[entry.name] }}
                       />
-                      <span className="text-[11px] text-gray-600 font-medium">
+                      <span className="text-[11px] text-slate-500">
                         {entry.name}{" "}
-                        <span className="text-gray-400">({entry.value})</span>
+                        <span className="text-slate-400">({entry.value})</span>
                       </span>
                     </div>
                   ))}
@@ -543,8 +544,8 @@ export default function AuthorityDashboard() {
 
             {/* Category Breakdown — Bar Chart */}
             {categoryChartData.length > 0 && (
-              <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4">
-                <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3">
+              <div className="bg-white border border-slate-100 rounded-xl p-4">
+                <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-3">
                   {t("auth.byCategory")}
                 </h4>
                 <div style={{ height: 180 }}>
@@ -611,12 +612,12 @@ export default function AuthorityDashboard() {
                   {categoryChartData.map((entry) => (
                     <div key={entry.name} className="flex items-center gap-1.5">
                       <span
-                        className="w-2.5 h-2.5 rounded-sm shrink-0"
+                        className="w-2 h-2 rounded-sm shrink-0"
                         style={{ background: entry.fill }}
                       />
-                      <span className="text-[11px] text-gray-600 font-medium">
+                      <span className="text-[11px] text-slate-500">
                         {entry.name}{" "}
-                        <span className="text-gray-400">({entry.count})</span>
+                        <span className="text-slate-400">({entry.count})</span>
                       </span>
                     </div>
                   ))}
@@ -628,9 +629,9 @@ export default function AuthorityDashboard() {
 
         {/* ── 7-Day Trend — Area Line Chart ── */}
         {hasTrendData && (
-          <div className="bg-white border border-gray-100 rounded-2xl shadow-sm p-4">
+          <div className="bg-white border border-slate-100 rounded-xl p-4">
             <div className="flex items-center justify-between mb-3">
-              <h4 className="text-xs font-bold text-gray-700 uppercase tracking-wider">
+              <h4 className="text-xs font-semibold text-slate-500 uppercase tracking-wider">
                 {t("auth.7dayTrend")}
               </h4>
               <div className="flex items-center gap-4">
@@ -754,15 +755,15 @@ export default function AuthorityDashboard() {
         )}
 
         {/* ── Filter tabs ── */}
-        <div className="flex gap-1 bg-gray-100 p-1 rounded-xl">
+        <div className="flex gap-1 bg-slate-100 p-1 rounded-lg">
           {["all", "pending", "in_progress", "completed"].map((f) => (
             <button
               key={f}
               onClick={() => handleFilterChange(f)}
-              className={`flex-1 py-1.5 rounded-lg text-xs font-medium capitalize transition ${
+              className={`flex-1 py-1.5 rounded-md text-xs font-medium capitalize transition ${
                 statusFilter === f
-                  ? "bg-white shadow-sm text-blue-700"
-                  : "text-gray-500 hover:text-gray-700"
+                  ? "bg-white shadow-sm text-indigo-600"
+                  : "text-slate-400 hover:text-slate-600"
               }`}
             >
               {f === "in_progress"
@@ -777,7 +778,7 @@ export default function AuthorityDashboard() {
               setLoading(true);
               fetchData();
             }}
-            className="px-2 text-gray-400 hover:text-blue-600 transition"
+            className="px-2 text-slate-400 hover:text-indigo-500 transition"
           >
             <RefreshCw className="w-3.5 h-3.5" />
           </button>
@@ -785,23 +786,27 @@ export default function AuthorityDashboard() {
 
         {/* Coverage area hint */}
         {selectedCategories.length > 0 && selectedDistrict ? (
-          <div className="flex items-center gap-1.5 text-blue-600 text-xs">
+          <div className="flex items-center gap-1.5 text-indigo-500 text-xs">
             <Shield className="w-3.5 h-3.5" />
-            {t("auth.showing")}:{" "}
+            <span>{t("auth.showing")}:</span>
             {selectedCategories.map((c) => (
-              <span key={c} className="mr-1 capitalize">
+              <span
+                key={c}
+                className="capitalize bg-indigo-50 px-1.5 py-0.5 rounded text-indigo-600"
+              >
                 {c}
               </span>
             ))}
-            · {selectedDistrict}
+            <span className="text-slate-400">·</span>
+            <span className="text-slate-600">{selectedDistrict}</span>
           </div>
         ) : (
           <div
-            className="flex items-center gap-2 bg-yellow-50 px-4 py-3 border border-yellow-200 rounded-xl cursor-pointer"
+            className="flex items-center gap-2 bg-amber-50 px-4 py-3 border border-amber-200 rounded-lg cursor-pointer hover:bg-amber-100 transition"
             onClick={() => setAreaOpen(true)}
           >
-            <AlertTriangle className="w-4 h-4 text-yellow-600 shrink-0" />
-            <p className="font-medium text-yellow-700 text-xs">
+            <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
+            <p className="font-medium text-amber-700 text-xs">
               {t("auth.selectAreaFirst")}
             </p>
           </div>
@@ -809,13 +814,11 @@ export default function AuthorityDashboard() {
 
         {/* ── Post feed ── */}
         {posts.length === 0 ? (
-          <div className="flex flex-col items-center gap-2 py-16 border-2 border-gray-200 border-dashed rounded-2xl text-center">
-            <ClipboardList className="w-8 h-8 text-gray-300" />
-            <p className="text-gray-400 text-sm">{t("auth.noIssues")}</p>
+          <div className="flex flex-col items-center gap-2 py-16 border border-dashed border-slate-200 rounded-xl text-center">
+            <ClipboardList className="w-8 h-8 text-slate-300" />
+            <p className="text-slate-400 text-sm">{t("auth.noIssues")}</p>
             {selectedCategories.length === 0 && (
-              <p className="text-gray-400 text-xs">
-                {t("auth.setArea")}
-              </p>
+              <p className="text-slate-400 text-xs">{t("auth.setArea")}</p>
             )}
           </div>
         ) : (
@@ -825,7 +828,7 @@ export default function AuthorityDashboard() {
               return (
                 <div
                   key={post._id}
-                  className={`bg-white shadow-sm rounded-2xl overflow-hidden border ${overdue ? "border-red-200" : "border-gray-100"}`}
+                  className={`bg-white rounded-xl overflow-hidden border ${overdue ? "border-red-200" : "border-slate-100"}`}
                 >
                   {/* Post photo */}
                   {post.photo && (
@@ -856,15 +859,15 @@ export default function AuthorityDashboard() {
                             className="rounded-full object-cover shrink-0"
                           />
                         ) : (
-                          <div className="flex justify-center items-center bg-gray-200 rounded-full w-7 h-7 text-gray-500 text-xs shrink-0">
+                          <div className="flex justify-center items-center bg-slate-100 rounded-full w-7 h-7 text-slate-500 text-xs shrink-0">
                             {post.author?.name?.[0]?.toUpperCase()}
                           </div>
                         )}
                         <div className="min-w-0">
-                          <p className="font-medium text-gray-700 text-xs truncate">
+                          <p className="font-medium text-slate-700 text-xs truncate">
                             {post.author?.name}
                           </p>
-                          <p className="text-[10px] text-gray-400">
+                          <p className="text-[10px] text-slate-400">
                             {timeAgo(post.createdAt)}
                           </p>
                         </div>
@@ -890,17 +893,17 @@ export default function AuthorityDashboard() {
 
                     {/* Title */}
                     <div>
-                      <h3 className="font-semibold text-gray-900 text-sm leading-snug">
+                      <h3 className="font-semibold text-slate-800 text-sm leading-snug">
                         {post.title}
                       </h3>
-                      <p className="mt-0.5 text-gray-500 text-xs line-clamp-2">
+                      <p className="mt-0.5 text-slate-400 text-xs line-clamp-2">
                         {post.description}
                       </p>
                     </div>
 
                     {/* Location */}
                     {post.location?.address && (
-                      <p className="flex items-center gap-1 text-gray-400 text-xs">
+                      <p className="flex items-center gap-1 text-slate-400 text-xs">
                         <MapPin className="w-3 h-3 shrink-0" />
                         <span className="truncate">
                           {post.location.address}
@@ -911,17 +914,20 @@ export default function AuthorityDashboard() {
                     {/* Deadline */}
                     {post.deadline && post.samasyaStatus !== "completed" && (
                       <p
-                        className={`text-xs ${overdue ? "text-red-500" : "text-gray-400"}`}
+                        className={`text-xs ${overdue ? "text-red-500" : "text-slate-400"}`}
                       >
-                        {t("auth.deadline")}: {new Date(post.deadline).toLocaleString()}
+                        {t("auth.deadline")}:{" "}
+                        {new Date(post.deadline).toLocaleString()}
                       </p>
                     )}
 
                     {/* Authority response if exists */}
                     {post.authorityResponse && (
-                      <div className="bg-blue-50 px-3 py-2 rounded-lg">
-                        <p className="text-blue-700 text-xs">
-                          <span className="font-medium">{t("auth.response")}: </span>
+                      <div className="bg-indigo-50 px-3 py-2 rounded-lg border border-indigo-100">
+                        <p className="text-indigo-700 text-xs">
+                          <span className="font-medium">
+                            {t("auth.response")}:{" "}
+                          </span>
                           {post.authorityResponse}
                         </p>
                       </div>
@@ -932,7 +938,9 @@ export default function AuthorityDashboard() {
                       <div className="flex gap-2 pt-1">
                         {post.samasyaStatus === "pending" && (
                           <button
-                            disabled={updatingId === post._id || !areaConfigured}
+                            disabled={
+                              updatingId === post._id || !areaConfigured
+                            }
                             onClick={() => {
                               if (!areaConfigured) {
                                 toast.error(t("common.selectAreaFirst"));
@@ -941,7 +949,7 @@ export default function AuthorityDashboard() {
                               }
                               handleStatusUpdate(post._id, "in_progress");
                             }}
-                            className="flex flex-1 justify-center items-center gap-1 bg-blue-50 hover:bg-blue-100 disabled:opacity-50 py-2 border border-blue-200 rounded-xl font-medium text-blue-700 text-xs transition"
+                            className="flex flex-1 justify-center items-center gap-1 bg-indigo-50 hover:bg-indigo-100 disabled:opacity-50 py-2 border border-indigo-200 rounded-lg font-medium text-indigo-600 text-xs transition"
                           >
                             <TrendingUp className="w-3.5 h-3.5" />
                             {t("auth.markInProgress")}
@@ -961,7 +969,7 @@ export default function AuthorityDashboard() {
                             });
                             setResponseText("");
                           }}
-                          className="flex flex-1 justify-center items-center gap-1 bg-green-50 hover:bg-green-100 disabled:opacity-50 py-2 border border-green-200 rounded-xl font-medium text-green-700 text-xs transition"
+                          className="flex flex-1 justify-center items-center gap-1 bg-emerald-50 hover:bg-emerald-100 disabled:opacity-50 py-2 border border-emerald-200 rounded-lg font-medium text-emerald-600 text-xs transition"
                         >
                           <CheckCircle className="w-3.5 h-3.5" />
                           {t("auth.markComplete")}
@@ -981,14 +989,14 @@ export default function AuthorityDashboard() {
                             });
                             setResponseText(post.authorityResponse || "");
                           }}
-                          className="bg-gray-50 hover:bg-gray-100 disabled:opacity-50 p-2 border border-gray-200 rounded-xl text-gray-500 transition"
+                          className="bg-slate-50 hover:bg-slate-100 disabled:opacity-50 p-2 border border-slate-200 rounded-lg text-slate-500 transition"
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
                         </button>
                       </div>
                     )}
                     {post.samasyaStatus === "completed" && (
-                      <div className="flex items-center gap-1 text-green-600 text-xs">
+                      <div className="flex items-center gap-1 text-emerald-600 text-xs">
                         <CheckCircle className="w-3.5 h-3.5" />
                         {t("post.resolved")}{" "}
                         {post.respondedAt ? timeAgo(post.respondedAt) : ""}
@@ -1004,16 +1012,19 @@ export default function AuthorityDashboard() {
 
       {/* ── Response / Complete modal ── */}
       {responseModal && (
-        <div className="z-50 fixed inset-0 flex justify-center items-end bg-black/50 p-4">
-          <div className="bg-white shadow-xl p-5 rounded-2xl w-full max-w-lg">
+        <div className="z-50 fixed inset-0 flex justify-center items-end bg-black/40 backdrop-blur-sm p-4">
+          <div className="bg-white p-5 rounded-xl w-full max-w-lg border border-slate-200 shadow-lg">
             <div className="flex justify-between items-center mb-3">
-              <h3 className="font-semibold text-gray-800 text-sm">
+              <h3 className="font-semibold text-slate-700 text-sm">
                 {responseModal.responseOnly
                   ? t("auth.addResponse")
                   : t("auth.markCompleted")}
               </h3>
-              <button onClick={() => setResponseModal(null)}>
-                <X className="w-4 h-4 text-gray-400" />
+              <button
+                onClick={() => setResponseModal(null)}
+                className="p-1 rounded-md hover:bg-slate-100 transition"
+              >
+                <X className="w-4 h-4 text-slate-400" />
               </button>
             </div>
             <textarea
@@ -1021,12 +1032,12 @@ export default function AuthorityDashboard() {
               onChange={(e) => setResponseText(e.target.value)}
               placeholder={t("auth.responsePlaceholder")}
               rows={3}
-              className="px-3 py-2 border border-gray-300 focus:border-blue-500 rounded-xl focus:outline-none w-full text-sm resize-none"
+              className="px-3 py-2 border border-slate-200 focus:border-indigo-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-100 w-full text-sm resize-none transition"
             />
             <div className="flex gap-2 mt-3">
               <button
                 onClick={() => setResponseModal(null)}
-                className="flex-1 hover:bg-gray-50 py-2 border border-gray-300 rounded-xl text-gray-600 text-sm transition"
+                className="flex-1 hover:bg-slate-50 py-2 border border-slate-200 rounded-lg text-slate-500 text-sm transition"
               >
                 {t("auth.cancel")}
               </button>
@@ -1036,7 +1047,7 @@ export default function AuthorityDashboard() {
                   onClick={() =>
                     handleStatusUpdate(responseModal.postId, "completed")
                   }
-                  className="flex-1 bg-green-600 hover:bg-green-700 disabled:opacity-60 py-2 rounded-xl font-medium text-white text-sm transition"
+                  className="flex-1 bg-emerald-600 hover:bg-emerald-700 disabled:opacity-60 py-2 rounded-lg font-medium text-white text-sm transition"
                 >
                   {updatingId === responseModal.postId
                     ? t("auth.saving")
@@ -1052,7 +1063,7 @@ export default function AuthorityDashboard() {
                       responseModal.currentStatus,
                     )
                   }
-                  className="flex-1 bg-blue-600 hover:bg-blue-700 disabled:opacity-60 py-2 rounded-xl font-medium text-white text-sm transition"
+                  className="flex-1 bg-indigo-600 hover:bg-indigo-700 disabled:opacity-60 py-2 rounded-lg font-medium text-white text-sm transition"
                 >
                   {updatingId === responseModal.postId
                     ? t("auth.saving")

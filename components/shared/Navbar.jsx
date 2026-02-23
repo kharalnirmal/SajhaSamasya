@@ -53,7 +53,6 @@ export default function Navbar() {
     { href: "/", Icon: Home, label: t("nav.home") },
     { href: "/create-post", Icon: Plus, label: t("nav.report"), isFab: true },
     { href: "/profile", Icon: User, label: t("nav.profile") },
-    { isLang: true, Icon: Globe, label: lang === "en" ? "NP" : "EN" },
   ];
 
   const authorityItems = [
@@ -64,7 +63,6 @@ export default function Navbar() {
     },
     { href: "/", Icon: Rss, label: t("nav.feed") },
     { href: "/profile", Icon: User, label: t("nav.profile") },
-    { isLang: true, Icon: Globe, label: lang === "en" ? "NP" : "EN" },
   ];
 
   const items = isAuthority ? authorityItems : citizenItems;
@@ -156,6 +154,38 @@ export default function Navbar() {
               {t("nav.citizen")}
             </span>
           )}
+        </div>
+
+        {/* RIGHT — language toggle */}
+        <div className="right-4 sm:right-6 absolute flex items-center">
+          <button
+            onClick={handleToggleLang}
+            aria-label="Switch language"
+            className="group flex items-center gap-1.5 px-2.5 py-1 rounded-full active:scale-95 transition-all duration-250 ease-[cubic-bezier(.34,1.56,.64,1)] cursor-pointer bg-transparent border-none"
+            style={{
+              background: isAuthority
+                ? "rgba(99,102,241,0.08)"
+                : "rgba(34,197,94,0.08)",
+              border: isAuthority
+                ? "1px solid rgba(99,102,241,0.22)"
+                : "1px solid rgba(34,197,94,0.22)",
+            }}
+          >
+            <Globe
+              size={14}
+              strokeWidth={2}
+              style={{ color: isAuthority ? "#6366f1" : "#16a34a" }}
+              className="group-hover:rotate-20 transition-transform duration-300"
+            />
+            <span
+              className={`font-bold text-[10px] uppercase tracking-wide leading-none
+                          transition-all duration-150
+                          ${langFlip ? "opacity-0 -translate-y-1" : "opacity-100 translate-y-0"}`}
+              style={{ color: isAuthority ? "#6366f1" : "#15803d" }}
+            >
+              {lang === "en" ? "NP" : "EN"}
+            </span>
+          </button>
         </div>
 
         {/* CENTER — logo + brand */}
@@ -250,7 +280,7 @@ export default function Navbar() {
                   key="fab"
                   href={href}
                   aria-label={label}
-                  className="group relative flex flex-col flex-1 justify-center items-center gap-1 py-1.5 rounded-2xl active:scale-95 transition-all duration-300 ease-[cubic-bezier(.34,1.56,.64,1)]"
+                  className="group relative flex flex-col flex-1 justify-center items-center gap-1 py-1.5 rounded-2xl active:scale-95 transition-all duration-300 ease-[cubic-bezier(.34,1.56,.64,1)] -translate-y-2"
                 >
                   <span
                     className="relative flex justify-center items-center rounded-2xl w-11 h-11 overflow-hidden group-active:scale-95 group-hover:scale-105 transition-all group-active:translate-y-0 group-hover:-translate-y-1 duration-300 ease-[cubic-bezier(.34,1.56,.64,1)]"
