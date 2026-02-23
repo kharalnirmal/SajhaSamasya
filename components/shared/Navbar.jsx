@@ -230,7 +230,7 @@ export default function Navbar() {
             {isSignedIn && user?.imageUrl ? (
               /* Avatar image — accent border always visible */
               <div
-                className="relative z-10 rounded-full p-[2px]
+                className="relative z-10 rounded-full p-0.5
                            transition-all duration-300 ease-[cubic-bezier(.34,1.56,.64,1)]
                            group-hover:scale-110"
                 style={{
@@ -287,7 +287,7 @@ export default function Navbar() {
       >
         <nav
           className="nav-bar pointer-events-auto flex items-center
-                     w-full max-w-[380px] p-2 gap-1"
+                     w-full max-w-95 p-2 gap-1"
           style={{
             background: "rgba(255,255,255,0.90)",
             backdropFilter: "blur(24px) saturate(200%)",
@@ -381,7 +381,7 @@ export default function Navbar() {
                       size={20}
                       strokeWidth={1.8}
                       style={{ color: isAuthority ? "#6366f1" : "#16a34a" }}
-                      className="group-hover:rotate-[20deg] transition-transform duration-300"
+                      className="group-hover:rotate-20 transition-transform duration-300"
                     />
                   </span>
                   <span

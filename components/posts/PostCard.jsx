@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
+import EditPost from "@/components/posts/editPost";
+import DeletePost from "@/components/posts/deletePost";
 import {
   MapPin,
   Clock,
@@ -56,8 +58,11 @@ function timeAgo(dateStr) {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-export default function PostCard({ post }) {
-  const { isSignedIn } = useUser();
+export default function PostCard({ post, onPostUpdated, onPostDeleted }) {
+  const { user, isSignedIn } = useUser();
+
+  // Check if current user is the post author
+  const isAuthor = isSignedIn && user && post.author?.clerkId === user.id;
 
   // Like state (optimistic)
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
@@ -182,15 +187,25 @@ export default function PostCard({ post }) {
             </div>
           </div>
 
-          {/* Status badge */}
-          <span
-            className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${status.color}`}
-          >
-            <StatusIcon
-              className={`w-3 h-3 ${status.spin ? "animate-spin" : ""}`}
-            />
-            {status.label}
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Edit / Delete for author */}
+            {isAuthor && (
+              <>
+                <EditPost post={post} onUpdated={onPostUpdated} />
+                <DeletePost postId={post._id} onDeleted={onPostDeleted} />
+              </>
+            )}
+
+            {/* Status badge */}
+            <span
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${status.color}`}
+            >
+              <StatusIcon
+                className={`w-3 h-3 ${status.spin ? "animate-spin" : ""}`}
+              />
+              {status.label}
+            </span>
+          </div>
         </div>
 
         {/* Title & description */}
@@ -247,9 +262,7 @@ export default function PostCard({ post }) {
                 : "text-gray-400 hover:text-primary hover:bg-primary/5"
             } disabled:opacity-50`}
           >
-            <ThumbsUp
-              className={`w-4 h-4 ${liked ? "fill-primary" : ""}`}
-            />
+            <ThumbsUp className={`w-4 h-4 ${liked ? "fill-primary" : ""}`} />
             <span>{likeCount}</span>
           </button>
 
