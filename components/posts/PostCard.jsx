@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Image from "next/image";
 import { useUser } from "@clerk/nextjs";
+import PostActionsMenu from "@/components/posts/PostActionsMenu";
 import {
   MapPin,
   Clock,
@@ -56,8 +57,13 @@ function timeAgo(dateStr) {
   return `${Math.floor(hrs / 24)}d ago`;
 }
 
-export default function PostCard({ post }) {
-  const { isSignedIn } = useUser();
+export default function PostCard({ post, onPostUpdated, onPostDeleted }) {
+  const { user, isSignedIn } = useUser();
+
+  // Check if current user is the post author or an authority
+  const isAuthor = isSignedIn && user && post.author?.clerkId === user.id;
+  const isAuthority = isSignedIn && user?.publicMetadata?.role === "authority";
+  const canManagePost = isAuthor || isAuthority;
 
   // Like state (optimistic)
   const [likeCount, setLikeCount] = useState(post.likes?.length || 0);
@@ -182,15 +188,26 @@ export default function PostCard({ post }) {
             </div>
           </div>
 
-          {/* Status badge */}
-          <span
-            className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${status.color}`}
-          >
-            <StatusIcon
-              className={`w-3 h-3 ${status.spin ? "animate-spin" : ""}`}
-            />
-            {status.label}
-          </span>
+          <div className="flex items-center gap-2 shrink-0">
+            {/* Three-dot menu for author or authority */}
+            {canManagePost && (
+              <PostActionsMenu
+                post={post}
+                onUpdated={onPostUpdated}
+                onDeleted={onPostDeleted}
+              />
+            )}
+
+            {/* Status badge */}
+            <span
+              className={`flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium shrink-0 ${status.color}`}
+            >
+              <StatusIcon
+                className={`w-3 h-3 ${status.spin ? "animate-spin" : ""}`}
+              />
+              {status.label}
+            </span>
+          </div>
         </div>
 
         {/* Title & description */}
@@ -247,9 +264,7 @@ export default function PostCard({ post }) {
                 : "text-gray-400 hover:text-primary hover:bg-primary/5"
             } disabled:opacity-50`}
           >
-            <ThumbsUp
-              className={`w-4 h-4 ${liked ? "fill-primary" : ""}`}
-            />
+            <ThumbsUp className={`w-4 h-4 ${liked ? "fill-primary" : ""}`} />
             <span>{likeCount}</span>
           </button>
 

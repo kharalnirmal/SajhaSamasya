@@ -126,9 +126,9 @@ export default function Navbar() {
           WebkitBackdropFilter: "blur(20px) saturate(180%)",
         }}
       >
-        {/* LEFT — authority badge or spacer */}
+        {/* LEFT — role badge */}
         <div className="w-20 sm:w-24 flex items-center">
-          {isAuthority && (
+          {isSignedIn && isAuthority && (
             <span
               className="flex items-center gap-1.5 px-2.5 py-1 rounded-full
                              text-[10px] font-bold tracking-wide uppercase"
@@ -140,6 +140,20 @@ export default function Navbar() {
             >
               <span className="w-1.5 h-1.5 rounded-full bg-indigo-500 animate-pulse" />
               Authority
+            </span>
+          )}
+          {isSignedIn && !isAuthority && (
+            <span
+              className="flex items-center gap-1.5 px-2.5 py-1 rounded-full
+                             text-[10px] font-bold tracking-wide uppercase"
+              style={{
+                background: "rgba(34,197,94,0.10)",
+                border: "1px solid rgba(34,197,94,0.22)",
+                color: "#15803d",
+              }}
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse" />
+              Citizen
             </span>
           )}
         </div>
@@ -230,7 +244,7 @@ export default function Navbar() {
             {isSignedIn && user?.imageUrl ? (
               /* Avatar image — accent border always visible */
               <div
-                className="relative z-10 rounded-full p-[2px]
+                className="relative z-10 rounded-full p-0.5
                            transition-all duration-300 ease-[cubic-bezier(.34,1.56,.64,1)]
                            group-hover:scale-110"
                 style={{
@@ -287,7 +301,7 @@ export default function Navbar() {
       >
         <nav
           className="nav-bar pointer-events-auto flex items-center
-                     w-full max-w-[380px] p-2 gap-1"
+                     w-full max-w-95 p-2 gap-1"
           style={{
             background: "rgba(255,255,255,0.90)",
             backdropFilter: "blur(24px) saturate(200%)",
@@ -381,7 +395,7 @@ export default function Navbar() {
                       size={20}
                       strokeWidth={1.8}
                       style={{ color: isAuthority ? "#6366f1" : "#16a34a" }}
-                      className="group-hover:rotate-[20deg] transition-transform duration-300"
+                      className="group-hover:rotate-20 transition-transform duration-300"
                     />
                   </span>
                   <span
