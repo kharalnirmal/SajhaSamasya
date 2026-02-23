@@ -138,7 +138,9 @@ export default function ProfilePage() {
                 }`}
               >
                 <Shield className="w-3 h-3" />
-                {u.role === "authority" ? t("profile.authority") : t("profile.citizen")}
+                {u.role === "authority"
+                  ? t("profile.authority")
+                  : t("profile.citizen")}
               </span>
             </div>
           </div>
@@ -165,7 +167,9 @@ export default function ProfilePage() {
 
       <div className="space-y-5 mx-auto px-4 pt-5 max-w-lg">
         {/* ── Stats row ── */}
-        <div className="gap-3 grid grid-cols-3">
+        <div
+          className={`gap-3 grid ${u.role === "authority" ? "grid-cols-2" : "grid-cols-3"}`}
+        >
           {[
             {
               label: t("profile.points"),
@@ -174,16 +178,20 @@ export default function ProfilePage() {
               color: "text-yellow-500",
               bg: "bg-yellow-50",
             },
-            {
-              label: t("profile.raised"),
-              value: u.issuesRaised,
-              icon: TrendingUp,
-              color: "text-primary",
-              bg: "bg-red-50",
-            },
+            ...(u.role !== "authority"
+              ? [
+                  {
+                    label: t("profile.raised"),
+                    value: u.issuesRaised,
+                    icon: TrendingUp,
+                    color: "text-primary",
+                    bg: "bg-red-50",
+                  },
+                ]
+              : []),
             {
               label: t("profile.solved"),
-              value: u.issuesSolved,
+              value: u.role === "authority" ? u.totalResolved : u.issuesSolved,
               icon: CheckCircle,
               color: "text-green-600",
               bg: "bg-green-50",
@@ -235,7 +243,9 @@ export default function ProfilePage() {
 
           {lockedBadges.length > 0 && (
             <>
-              <p className="mb-2 text-gray-400 text-xs">{t("profile.locked")}</p>
+              <p className="mb-2 text-gray-400 text-xs">
+                {t("profile.locked")}
+              </p>
               <div className="flex flex-wrap gap-2">
                 {lockedBadges.map((b) => (
                   <div
@@ -266,7 +276,9 @@ export default function ProfilePage() {
         <div>
           <div className="flex justify-between items-center mb-3">
             <h3 className="font-semibold text-gray-800 text-sm">
-              {u.role === "authority" ? t("profile.handledIssues") : t("profile.yourIssues")}
+              {u.role === "authority"
+                ? t("profile.handledIssues")
+                : t("profile.yourIssues")}
             </h3>
             {u.role !== "authority" && (
               <Link

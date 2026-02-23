@@ -3,7 +3,11 @@ import { NextResponse } from "next/server";
 import connectDB from "@/lib/db";
 import User from "@/lib/models/User";
 import Post from "@/lib/models/Post";
-import { BADGE_DEFS, computeNewBadges, getBadgeDefsForRole } from "@/lib/badges";
+import {
+  BADGE_DEFS,
+  computeNewBadges,
+  getBadgeDefsForRole,
+} from "@/lib/badges";
 
 // GET /api/user/profile – current user's full profile with stats, badges, recent posts
 export async function GET() {
@@ -44,7 +48,12 @@ export async function GET() {
     }
 
     // Fetch user's recent posts (latest 10)
-    const recentPosts = await Post.find({ author: user._id })
+    // For authorities, show posts they responded to; for citizens, posts they authored
+    const postQuery =
+      user.role === "authority"
+        ? { respondedBy: user._id }
+        : { author: user._id };
+    const recentPosts = await Post.find(postQuery)
       .sort({ createdAt: -1 })
       .limit(10)
       .select("title category samasyaStatus createdAt photo");
